@@ -1,15 +1,22 @@
 import XCTest
+import DeviceCheck
 @testable import BmDeviceIntegrityPluginPlugin
 
 class BmDeviceIntegrityPluginTests: XCTestCase {
-    func testEcho() {
-        // This is an example of a functional test case for a plugin.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testInvalidKeyErrorIsMappedToDedicatedCode() {
+        let error = NSError(domain: DCErrorDomain, code: DCError.Code.invalidKey.rawValue)
+        XCTAssertEqual(BmDeviceIntegrityPlugin.errorCode(error), "APP_ATTEST_INVALID_KEY")
+    }
 
-        let implementation = BmDeviceIntegrityPlugin()
-        let value = "Hello, World!"
-        let result = implementation.echo(value)
+    func testForeignErrorFallsBackToGenericCode() {
+        let error = NSError(domain: NSURLErrorDomain, code: -1)
+        XCTAssertEqual(BmDeviceIntegrityPlugin.errorCode(error), "APP_ATTEST_ERROR")
+    }
 
-        XCTAssertEqual(value, result)
+    func testClientDataHashIsSha256OfUtf8() {
+        // SHA-256("abc")
+        let expected = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        let hash = BmDeviceIntegrityPlugin.clientDataHash("abc")
+        XCTAssertEqual(hash.map { String(format: "%02x", $0) }.joined(), expected)
     }
 }
