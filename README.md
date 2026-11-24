@@ -95,7 +95,7 @@ npx cap sync
 
 `@capacitor/preferences` нужен только для хранения `keyId` App Attest. `keyId` не секрет (сам ключ лежит в Secure Enclave), поэтому подойдёт любое хранилище.
 
-Нативную настройку (Play Console, AppGallery Connect, entitlement App Attest) см. в разделе [Платформенные требования](#платформенные-требования).
+Нативную настройку (Play Console, entitlement App Attest) см. в разделе [Платформенные требования](#платформенные-требования).
 
 ### Контракт с backend (пример)
 
